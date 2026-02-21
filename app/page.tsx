@@ -1,5 +1,6 @@
 import { AetherHero } from "@/components/main/hero";
 import { GlowingEffect } from "@/components/main/glowing-effect";
+import Image from "next/image";
 
 const strengths = [
   {
@@ -37,14 +38,26 @@ const strengths = [
 export default function Home() {
   return (
     <main className="bg-black text-white">
-      <AetherHero
-        title="Brian Huh"
-        subtitle="Product Manager and problem-solver"
-        ctaLabel="View Strengths"
-        ctaHref="#strengths"
-        secondaryCtaLabel="Contact"
-        secondaryCtaHref="#"
-      />
+      <section className="relative">
+        <AetherHero
+          title="Brian Huh"
+          subtitle="Product Manager and problem-solver"
+          ctaLabel="View Strengths"
+          ctaHref="#strengths"
+          secondaryCtaLabel="Contact"
+          secondaryCtaHref="#"
+        />
+        <div className="pointer-events-none absolute bottom-0 right-4 z-30 hidden lg:block xl:right-12">
+          <Image
+            src="/bhuh2-2.png"
+            alt="Brian Huh"
+            width={510}
+            height={690}
+            className="h-auto w-[330px] object-contain object-bottom xl:w-[450px]"
+            priority
+          />
+        </div>
+      </section>
 
       <section
         id="strengths"
