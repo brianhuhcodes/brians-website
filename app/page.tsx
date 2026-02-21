@@ -68,11 +68,12 @@ export default function Home() {
               >
                 <GlowingEffect
                   blur={0}
-                  spread={35}
+                  spread={46}
                   proximity={90}
                   inactiveZone={0.3}
                   borderWidth={2}
                   disabled={false}
+                  alwaysAnimate
                 />
                 <h3 className="relative text-xl font-semibold">{item.title}</h3>
                 <p className="relative mt-3 text-sm leading-6 text-white/80">{item.description}</p>

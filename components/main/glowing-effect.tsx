@@ -16,6 +16,9 @@ interface GlowingEffectProps {
   disabled?: boolean;
   movementDuration?: number;
   borderWidth?: number;
+  alwaysAnimate?: boolean;
+  baseIntensity?: number;
+  hoverIntensity?: number;
 }
 
 const GlowingEffect = memo(
@@ -30,6 +33,9 @@ const GlowingEffect = memo(
     movementDuration = 2,
     borderWidth = 1,
     disabled = true,
+    alwaysAnimate = false,
+    baseIntensity = 0.72,
+    hoverIntensity = 1,
   }: GlowingEffectProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const lastPosition = useRef({ x: 0, y: 0 });
@@ -93,6 +99,58 @@ const GlowingEffect = memo(
     );
 
     useEffect(() => {
+      const element = containerRef.current;
+      if (!element) return;
+      const parent = element.parentElement;
+      if (!parent) return;
+
+      const onEnter = () => element.style.setProperty("--intensity", String(hoverIntensity));
+      const onLeave = () => element.style.setProperty("--intensity", String(baseIntensity));
+
+      element.style.setProperty("--intensity", String(baseIntensity));
+      element.style.setProperty("--hover", "0");
+      const onHoverEnter = () => {
+        element.style.setProperty("--intensity", String(hoverIntensity));
+        element.style.setProperty("--hover", "1");
+      };
+      const onHoverLeave = () => {
+        element.style.setProperty("--intensity", String(baseIntensity));
+        element.style.setProperty("--hover", "0");
+      };
+      parent.addEventListener("pointerenter", onEnter);
+      parent.addEventListener("pointerleave", onLeave);
+      parent.addEventListener("mouseenter", onHoverEnter);
+      parent.addEventListener("mouseleave", onHoverLeave);
+
+      return () => {
+        parent.removeEventListener("pointerenter", onEnter);
+        parent.removeEventListener("pointerleave", onLeave);
+        parent.removeEventListener("mouseenter", onHoverEnter);
+        parent.removeEventListener("mouseleave", onHoverLeave);
+      };
+    }, [baseIntensity, hoverIntensity]);
+
+    useEffect(() => {
+      if (alwaysAnimate && containerRef.current) {
+        const element = containerRef.current;
+        const startOffset = Math.random() * 360;
+        element.style.setProperty("--active", "1");
+
+        const tick = (now: number) => {
+          const angle = (startOffset + now * 0.039) % 360;
+          element.style.setProperty("--start", String(angle));
+          animationFrameRef.current = requestAnimationFrame(tick);
+        };
+
+        animationFrameRef.current = requestAnimationFrame(tick);
+
+        return () => {
+          if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+          }
+        };
+      }
+
       if (disabled) return;
 
       const handleScroll = () => handleMove();
@@ -110,7 +168,7 @@ const GlowingEffect = memo(
         window.removeEventListener("scroll", handleScroll);
         document.body.removeEventListener("pointermove", handlePointerMove);
       };
-    }, [handleMove, disabled]);
+    }, [handleMove, disabled, alwaysAnimate]);
 
     return (
       <>
@@ -130,6 +188,8 @@ const GlowingEffect = memo(
               "--spread": spread,
               "--start": "0",
               "--active": "0",
+              "--intensity": String(baseIntensity),
+              "--hover": "0",
               "--glowingeffect-border-width": `${borderWidth}px`,
               "--repeating-conic-gradient-times": "5",
               "--gradient":
@@ -162,17 +222,45 @@ const GlowingEffect = memo(
           )}
         >
           <div
-            className={cn(
-              "glow",
-              "rounded-[inherit]",
-              'after:content-[""] after:absolute after:inset-[calc(-1*var(--glowingeffect-border-width))] after:rounded-[inherit]',
-              "after:[border:var(--glowingeffect-border-width)_solid_transparent]",
-              "after:[background:var(--gradient)] after:[background-attachment:fixed]",
-              "after:opacity-[var(--active)] after:transition-opacity after:duration-300",
-              "after:[mask-clip:padding-box,border-box]",
-              "after:[mask-composite:intersect]",
-              "after:[mask-image:linear-gradient(#0000,#0000),conic-gradient(from_calc((var(--start)-var(--spread))*1deg),#00000000_0deg,#fff,#00000000_calc(var(--spread)*2deg))]"
-            )}
+            className="absolute inset-0 rounded-[inherit] transition-opacity duration-200"
+            style={
+              {
+                padding: "var(--glowingeffect-border-width)",
+                background:
+                  "linear-gradient(120deg, #dd7bbb 0%, #d79f1e 30%, #5a922c 65%, #4c7894 100%)",
+                backgroundAttachment: "fixed",
+                opacity: "calc(var(--hover) * var(--intensity))",
+                WebkitMask:
+                  "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                WebkitMaskComposite: "xor",
+                maskComposite: "exclude",
+                filter: "drop-shadow(0 0 12px rgba(221,123,187,0.45))",
+              } as CSSProperties
+            }
+          />
+          <div
+            className="absolute inset-0 rounded-[inherit] transition-opacity duration-300"
+            style={
+              {
+                padding: "var(--glowingeffect-border-width)",
+                background: `conic-gradient(
+                  from calc(var(--start) * 1deg),
+                  transparent 0deg,
+                  transparent calc(360deg - var(--spread) * 1deg),
+                  #dd7bbb calc(360deg - var(--spread) * 1deg),
+                  #d79f1e calc(360deg - var(--spread) * 0.7deg),
+                  #5a922c calc(360deg - var(--spread) * 0.4deg),
+                  #4c7894 calc(360deg - var(--spread) * 0.15deg),
+                  transparent 360deg
+                )`,
+                opacity: "calc(var(--active) * var(--intensity) * (1 - var(--hover)))",
+                WebkitMask:
+                  "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                WebkitMaskComposite: "xor",
+                maskComposite: "exclude",
+                filter: "drop-shadow(0 0 10px rgba(221,123,187,0.35))",
+              } as CSSProperties
+            }
           />
         </div>
       </>
