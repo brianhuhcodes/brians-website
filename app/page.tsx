@@ -40,84 +40,68 @@ const timelineData = [
   {
     id: "wipro-2025",
     title: "2025",
-    content: (
-      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
-        <p className="text-lg font-semibold text-white">Wipro</p>
-        <p className="mt-1 text-sm text-white/80">Sector Growth &amp; Enablement Lead (Chief of Staff to VP)</p>
-        <p className="mt-3 text-sm leading-6 text-white/80">
-          Led GTM strategy, sales enablement, executive strategy reviews, and partnership development across technology
-          platform offerings.
-        </p>
-      </div>
-    ),
+    company: "Wipro",
+    role: "Sector Growth & Enablement Lead (Chief of Staff to VP)",
+    description:
+      "Led GTM strategy, sales enablement, executive strategy reviews, and partnership development across technology platform offerings.",
+    logoSrc: "/Wipro.png",
+    logoAlt: "Wipro logo",
+    logoClassName: "h-20",
   },
   {
     id: "tepper-2023",
     title: "2023",
-    content: (
-      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
-        <p className="text-lg font-semibold text-white">Carnegie Mellon University (Tepper School of Business)</p>
-        <p className="mt-1 text-sm text-white/80">MBA - Strategy, Business Technologies, Operations Research</p>
-        <p className="mt-3 text-sm leading-6 text-white/80">
-          Completed MBA while building strategy and product leadership skills applied across consulting and startup
-          work.
-        </p>
-      </div>
-    ),
+    company: "Carnegie Mellon University (Tepper School of Business)",
+    role: "MBA - Strategy, Business Technologies, Operations Research",
+    description:
+      "Completed MBA while building strategy and product leadership skills applied across consulting and startup work.",
+    logoSrc: "/Tepper.png",
+    logoAlt: "Tepper logo",
+    logoClassName: "h-20",
   },
   {
     id: "tomamor-2017-2023",
     title: "2017-2023",
-    content: (
-      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
-        <p className="text-lg font-semibold text-white">Tomamor Photo</p>
-        <p className="mt-1 text-sm text-white/80">Product Lead (Founder)</p>
-        <p className="mt-3 text-sm leading-6 text-white/80">
-          Launched and scaled a photo processing startup, leading product lifecycle, user research, and data-driven
-          growth through SEO and performance marketing.
-        </p>
-      </div>
-    ),
+    company: "Tomamor Photo",
+    role: "Product Lead (Founder)",
+    description:
+      "Launched and scaled a photo processing startup, leading product lifecycle, user research, and data-driven growth through SEO and performance marketing.",
+    logoSrc: "/Tomamor-Square-Logo-Only.png",
+    logoAlt: "Tomamor logo",
+    logoClassName: "h-20",
   },
   {
     id: "ibm-2022",
     title: "2022",
-    content: (
-      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
-        <p className="text-lg font-semibold text-white">IBM</p>
-        <p className="mt-1 text-sm text-white/80">Strategy Consultant - AI Applications</p>
-        <p className="mt-3 text-sm leading-6 text-white/80">
-          Developed AI/ML SaaS roadmap and conducted market due diligence to support product positioning and sales
-          engagement.
-        </p>
-      </div>
-    ),
+    company: "IBM",
+    role: "Strategy Consultant - AI Applications",
+    description:
+      "Developed AI/ML SaaS roadmap and conducted market due diligence to support product positioning and sales engagement.",
+    logoSrc: "/IBM_logo.svg",
+    logoAlt: "IBM logo",
+    logoClassName: "h-10",
   },
   {
     id: "ally-2021",
     title: "2021",
-    content: (
-      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
-        <p className="text-lg font-semibold text-white">Ally Coffee (Grupo Montesanto Tavares)</p>
-        <p className="mt-1 text-sm text-white/80">Account Manager / Lead Specialist Global</p>
-        <p className="mt-3 text-sm leading-6 text-white/80">
-          Owned account growth, drove GTM expansion in Asia, and built analytics-enabled lead and conversion workflows.
-        </p>
-      </div>
-    ),
+    company: "Ally Coffee (Grupo Montesanto Tavares)",
+    role: "Account Manager / Lead Specialist Global",
+    description:
+      "Owned account growth, drove GTM expansion in Asia, and built analytics-enabled lead and conversion workflows.",
+    logoSrc: "/Ally%20Coffee.png",
+    logoAlt: "Ally Coffee logo",
+    logoClassName: "h-20",
   },
   {
     id: "ecafe-2014",
     title: "2014",
-    content: (
-      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
-        <p className="text-lg font-semibold text-white">E-Cafe Exportadora de Cafe de Chiapas</p>
-        <p className="mt-1 text-sm text-white/80">Director of Marketing</p>
-        <p className="mt-3 text-sm leading-6 text-white/80">
-          Led cross-functional operations and growth strategy, improving efficiency and expanding the customer base.
-        </p>
-      </div>
-    ),
+    company: "E-Cafe Exportadora de Cafe de Chiapas",
+    role: "Director of Marketing",
+    description:
+      "Led cross-functional operations and growth strategy, improving efficiency and expanding the customer base.",
+    logoSrc: "/E-cafe%20Chiapas.png",
+    logoAlt: "E-cafe Chiapas logo",
+    logoClassName: "h-20",
   },
 ];
 
@@ -169,9 +153,9 @@ export default function Home() {
           <p className="mt-3 max-w-2xl text-white/80">Strengths that define how I build and lead.</p>
 
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {strengths.map((item) => (
+            {strengths.map((item, index) => (
               <article
-                key={item.title}
+                key={`${item.title}-${index}`}
                 className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-md"
               >
                 <GlowingEffect
