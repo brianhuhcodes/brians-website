@@ -24,6 +24,10 @@ function GoogleAnalyticsPageView({ measurementId }: GoogleAnalyticsProps) {
     const query = searchParams.toString();
     const pagePath = query ? `${pathname}?${query}` : pathname;
 
+    if (process.env.NODE_ENV !== "production") {
+      console.info("[GA] page_view", { measurementId, pagePath });
+    }
+
     window.gtag("config", measurementId, {
       page_path: pagePath,
     });
@@ -33,6 +37,12 @@ function GoogleAnalyticsPageView({ measurementId }: GoogleAnalyticsProps) {
 }
 
 export function GoogleAnalytics({ measurementId }: GoogleAnalyticsProps) {
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production") {
+      console.info("[GA] initialized", { measurementId });
+    }
+  }, [measurementId]);
+
   return (
     <>
       <Script
