@@ -19,6 +19,10 @@ export type AetherHeroProps = {
   height?: string | number;
   className?: string;
   ariaLabel?: string;
+  layer?: 'full' | 'boxes' | 'lines';
+  showContent?: boolean;
+  showOverlay?: boolean;
+  absoluteFill?: boolean;
 };
 
 const DEFAULT_FRAG = `#version 300 es
@@ -26,6 +30,7 @@ precision highp float;
 out vec4 O;
 uniform float time;
 uniform vec2 resolution;
+uniform int layerMode;
 #define FC gl_FragCoord.xy
 #define R resolution
 #define T time
@@ -50,12 +55,24 @@ vec3 scene(vec2 uv) {
 }
 void main() {
   vec2 uv=(FC-.5*R)/MN;
-  vec3 col=vec3(0);
   float s=12., e=9e-4;
-  col+=e/(sin(uv.x*s)*cos(uv.y*s));
+  vec3 boxes = vec3(e/(sin(uv.x*s)*cos(uv.y*s)));
   uv.y+=R.x>R.y?.5:.5*(R.y/R.x);
-  col+=scene(uv);
-  O=vec4(col,1.);
+  vec3 lines = clamp(scene(uv) * 1.2, 0., 1.);
+  float lineIntensity = 0.7;
+  lines *= lineIntensity;
+  float boxesAlpha = clamp(max(max(abs(boxes.r), abs(boxes.g)), abs(boxes.b)) * 0.9, 0., 0.85);
+  float linesAlpha = clamp(max(max(lines.r, lines.g), lines.b) * lineIntensity, 0., 0.95);
+
+  if (layerMode == 1) {
+    vec3 boxesCol = clamp(vec3(0.02) + abs(boxes), 0., 1.);
+    O = vec4(boxesCol, boxesAlpha);
+  } else if (layerMode == 2) {
+    O = vec4(lines, linesAlpha);
+  } else {
+    vec3 fullCol = clamp(vec3(0.02) + abs(boxes) + lines, 0., 1.);
+    O = vec4(fullCol, clamp(boxesAlpha + linesAlpha, 0., 0.98));
+  }
 }`;
 
 const VERT_SRC = `#version 300 es
@@ -77,16 +94,21 @@ export default function AetherHero({
   textColor = '#ffffff',
   fragmentSource = DEFAULT_FRAG,
   dprMax = 2,
-  clearColor = [0, 0, 0, 1],
+  clearColor = [0, 0, 0, 0],
   height = '100vh',
   className = '',
   ariaLabel = 'Aurora hero background',
+  layer = 'full',
+  showContent = true,
+  showOverlay = true,
+  absoluteFill = false,
 }: AetherHeroProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const programRef = useRef<WebGLProgram | null>(null);
   const bufRef = useRef<WebGLBuffer | null>(null);
   const uniTimeRef = useRef<WebGLUniformLocation | null>(null);
   const uniResRef = useRef<WebGLUniformLocation | null>(null);
+  const uniLayerRef = useRef<WebGLUniformLocation | null>(null);
   const rafRef = useRef<number | null>(null);
 
   const compileShader = (gl: WebGL2RenderingContext, src: string, type: number) => {
@@ -146,6 +168,7 @@ export default function AetherHero({
 
     uniTimeRef.current = gl.getUniformLocation(prog, 'time');
     uniResRef.current = gl.getUniformLocation(prog, 'resolution');
+    uniLayerRef.current = gl.getUniformLocation(prog, 'layerMode');
 
     gl.clearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
 
@@ -175,6 +198,10 @@ export default function AetherHero({
       gl.bindBuffer(gl.ARRAY_BUFFER, buf);
       if (uniResRef.current) gl.uniform2f(uniResRef.current, canvas.width, canvas.height);
       if (uniTimeRef.current) gl.uniform1f(uniTimeRef.current, now * 1e-3);
+      if (uniLayerRef.current) {
+        const layerValue = layer === 'boxes' ? 1 : layer === 'lines' ? 2 : 0;
+        gl.uniform1i(uniLayerRef.current, layerValue);
+      }
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       rafRef.current = requestAnimationFrame(loop);
     };
@@ -187,7 +214,7 @@ export default function AetherHero({
       if (bufRef.current) gl.deleteBuffer(bufRef.current);
       if (programRef.current) gl.deleteProgram(programRef.current);
     };
-  }, [fragmentSource, dprMax, clearColor]);
+  }, [fragmentSource, dprMax, clearColor, layer]);
 
   const justify = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
   const textAlign = align === 'left' ? 'left' : align === 'right' ? 'right' : 'center';
@@ -195,7 +222,12 @@ export default function AetherHero({
   return (
     <section
       className={['aurora-hero', className].join(' ')}
-      style={{ height, position: 'relative', overflow: 'hidden' }}
+      style={{
+        height,
+        position: absoluteFill ? 'absolute' : 'relative',
+        inset: absoluteFill ? 0 : undefined,
+        overflow: 'hidden',
+      }}
       aria-label="Hero"
     >
       <style jsx global>{`
@@ -218,121 +250,125 @@ export default function AetherHero({
         }}
       />
 
-      <div
-        className="aurora-overlay"
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: overlayGradient,
-          pointerEvents: 'none',
-        }}
-      />
-
-      <div
-        className="aurora-content"
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: justify,
-          padding: 'min(6vw, 64px)',
-          color: textColor,
-          fontFamily:
-            "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial",
-        }}
-      >
+      {showOverlay ? (
         <div
+          className="aurora-overlay"
+          aria-hidden="true"
           style={{
-            width: '100%',
-            maxWidth,
-            marginInline: align === 'center' ? 'auto' : undefined,
-            textAlign,
+            position: 'absolute',
+            inset: 0,
+            background: overlayGradient,
+            pointerEvents: 'none',
+          }}
+        />
+      ) : null}
+
+      {showContent ? (
+        <div
+          className="aurora-content"
+          style={{
+            position: 'relative',
+            zIndex: 2,
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: justify,
+            padding: 'min(6vw, 64px)',
+            color: textColor,
+            fontFamily:
+              "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial",
           }}
         >
-          <h1
+          <div
             style={{
-              margin: 0,
-              fontSize: 'clamp(2.2rem, 6vw, 4.5rem)',
-              lineHeight: 1.04,
-              letterSpacing: '-0.02em',
-              fontWeight: 700,
-              textShadow: '0 6px 36px rgba(0,0,0,0.45)',
+              width: '100%',
+              maxWidth,
+              marginInline: align === 'center' ? 'auto' : undefined,
+              textAlign,
             }}
           >
-            {title}
-          </h1>
-
-          {subtitle ? (
-            <p
+            <h1
               style={{
-                marginTop: '1rem',
-                fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-                lineHeight: 1.6,
-                opacity: 0.9,
-                textShadow: '0 4px 24px rgba(0,0,0,0.35)',
-                maxWidth: 900,
-                marginInline: align === 'center' ? 'auto' : undefined,
+                margin: 0,
+                fontSize: 'clamp(2.2rem, 6vw, 4.5rem)',
+                lineHeight: 1.04,
+                letterSpacing: '-0.02em',
+                fontWeight: 700,
+                textShadow: '0 6px 36px rgba(0,0,0,0.45)',
               }}
             >
-              {subtitle}
-            </p>
-          ) : null}
+              {title}
+            </h1>
 
-          {(ctaLabel || secondaryCtaLabel) && (
-            <div
-              style={{
-                display: 'inline-flex',
-                gap: '12px',
-                marginTop: '2rem',
-                flexWrap: 'wrap',
-              }}
-            >
-              {ctaLabel ? (
-                <a
-                  href={ctaHref}
-                  className="aurora-btn aurora-btn--primary"
-                  style={{
-                    padding: '12px 18px',
-                    borderRadius: 12,
-                    background:
-                      'linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.06))',
-                    color: textColor,
-                    textDecoration: 'none',
-                    fontWeight: 600,
-                    boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.28), 0 10px 30px rgba(0,0,0,.2)',
-                    backdropFilter: 'blur(6px) saturate(120%)',
-                  }}
-                >
-                  {ctaLabel}
-                </a>
-              ) : null}
+            {subtitle ? (
+              <p
+                style={{
+                  marginTop: '1rem',
+                  fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+                  lineHeight: 1.6,
+                  opacity: 0.9,
+                  textShadow: '0 4px 24px rgba(0,0,0,0.35)',
+                  maxWidth: 900,
+                  marginInline: align === 'center' ? 'auto' : undefined,
+                }}
+              >
+                {subtitle}
+              </p>
+            ) : null}
 
-              {secondaryCtaLabel ? (
-                <a
-                  href={secondaryCtaHref}
-                  className="aurora-btn aurora-btn--ghost"
-                  style={{
-                    padding: '12px 18px',
-                    borderRadius: 12,
-                    background: 'transparent',
-                    color: textColor,
-                    opacity: 0.85,
-                    textDecoration: 'none',
-                    fontWeight: 600,
-                    boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.28)',
-                    backdropFilter: 'blur(2px)',
-                  }}
-                >
-                  {secondaryCtaLabel}
-                </a>
-              ) : null}
-            </div>
-          )}
+            {(ctaLabel || secondaryCtaLabel) && (
+              <div
+                style={{
+                  display: 'inline-flex',
+                  gap: '12px',
+                  marginTop: '2rem',
+                  flexWrap: 'wrap',
+                }}
+              >
+                {ctaLabel ? (
+                  <a
+                    href={ctaHref}
+                    className="aurora-btn aurora-btn--primary"
+                    style={{
+                      padding: '12px 18px',
+                      borderRadius: 12,
+                      background:
+                        'linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.06))',
+                      color: textColor,
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.28), 0 10px 30px rgba(0,0,0,.2)',
+                      backdropFilter: 'blur(6px) saturate(120%)',
+                    }}
+                  >
+                    {ctaLabel}
+                  </a>
+                ) : null}
+
+                {secondaryCtaLabel ? (
+                  <a
+                    href={secondaryCtaHref}
+                    className="aurora-btn aurora-btn--ghost"
+                    style={{
+                      padding: '12px 18px',
+                      borderRadius: 12,
+                      background: 'transparent',
+                      color: textColor,
+                      opacity: 0.85,
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.28)',
+                      backdropFilter: 'blur(2px)',
+                    }}
+                  >
+                    {secondaryCtaLabel}
+                  </a>
+                ) : null}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      ) : null}
     </section>
   );
 }

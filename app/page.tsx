@@ -42,6 +42,8 @@ export default function Home() {
     <main className="bg-black text-white">
       <section className="relative">
         <AetherHero
+          className="z-20"
+          layer="boxes"
           title="Brian Huh"
           subtitle="Product Manager and problem-solver"
           ctaLabel="View Strengths"
@@ -49,16 +51,23 @@ export default function Home() {
           secondaryCtaLabel="Contact"
           secondaryCtaHref="#"
         />
-        <div className="pointer-events-none absolute bottom-0 right-4 z-30 hidden lg:block xl:right-12">
+        <div className="pointer-events-none absolute bottom-0 right-0 z-40 block sm:right-2 lg:right-4 xl:right-12">
           <Image
-            src={`${basePath}/bhuh2-2.png`}
+            src={`${basePath}/bhuh2-3.png`}
             alt="Brian Huh"
             width={510}
             height={690}
-            className="h-auto w-[330px] object-contain object-bottom xl:w-[450px]"
+            className="h-auto w-[48vw] min-w-[220px] max-w-[320px] object-contain object-bottom sm:w-[42vw] sm:max-w-[380px] lg:w-[clamp(420px,36vw,680px)] lg:max-w-[680px]"
             priority
           />
         </div>
+        <AetherHero
+          className="pointer-events-none z-50"
+          layer="lines"
+          showContent={false}
+          showOverlay={false}
+          absoluteFill
+        />
       </section>
 
       <section
