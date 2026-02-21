@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 type GoogleAnalyticsProps = {
@@ -16,13 +16,12 @@ declare global {
 
 function GoogleAnalyticsPageView({ measurementId }: GoogleAnalyticsProps) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (!window.gtag) return;
 
-    const query = searchParams.toString();
-    const pagePath = query ? `${pathname}?${query}` : pathname;
+    const query = window.location.search;
+    const pagePath = query ? `${pathname}${query}` : pathname;
 
     if (process.env.NODE_ENV !== "production") {
       console.info("[GA] page_view", { measurementId, pagePath });
@@ -31,7 +30,7 @@ function GoogleAnalyticsPageView({ measurementId }: GoogleAnalyticsProps) {
     window.gtag("config", measurementId, {
       page_path: pagePath,
     });
-  }, [measurementId, pathname, searchParams]);
+  }, [measurementId, pathname]);
 
   return null;
 }
