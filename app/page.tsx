@@ -38,19 +38,21 @@ const strengths = [
 
 const timelineData = [
   {
+    id: "wipro-2025",
     title: "2025",
     content: (
       <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
         <p className="text-lg font-semibold text-white">Wipro</p>
         <p className="mt-1 text-sm text-white/80">Sector Growth &amp; Enablement Lead (Chief of Staff to VP)</p>
         <p className="mt-3 text-sm leading-6 text-white/80">
-          Led GTM strategy, sales enablement, executive strategy reviews, and partnership development across
-          technology platform offerings.
+          Led GTM strategy, sales enablement, executive strategy reviews, and partnership development across technology
+          platform offerings.
         </p>
       </div>
     ),
   },
   {
+    id: "tepper-2023",
     title: "2023",
     content: (
       <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
@@ -64,6 +66,7 @@ const timelineData = [
     ),
   },
   {
+    id: "tomamor-2017-2023",
     title: "2017-2023",
     content: (
       <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
@@ -77,6 +80,7 @@ const timelineData = [
     ),
   },
   {
+    id: "ibm-2022",
     title: "2022",
     content: (
       <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
@@ -90,6 +94,7 @@ const timelineData = [
     ),
   },
   {
+    id: "ally-2021",
     title: "2021",
     content: (
       <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
@@ -102,10 +107,11 @@ const timelineData = [
     ),
   },
   {
+    id: "ecafe-2014",
     title: "2014",
     content: (
       <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
-        <p className="text-lg font-semibold text-white">E-Café Exportadora de Café de Chiapas</p>
+        <p className="text-lg font-semibold text-white">E-Cafe Exportadora de Cafe de Chiapas</p>
         <p className="mt-1 text-sm text-white/80">Director of Marketing</p>
         <p className="mt-3 text-sm leading-6 text-white/80">
           Led cross-functional operations and growth strategy, improving efficiency and expanding the customer base.
@@ -160,9 +166,7 @@ export default function Home() {
       >
         <div className="mx-auto max-w-6xl">
           <h2 className="text-3xl font-semibold sm:text-4xl">Strengths</h2>
-          <p className="mt-3 max-w-2xl text-white/80">
-            Strengths that define how I build and lead.
-          </p>
+          <p className="mt-3 max-w-2xl text-white/80">Strengths that define how I build and lead.</p>
 
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {strengths.map((item) => (
