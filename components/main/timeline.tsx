@@ -37,8 +37,8 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
 
   return (
     <div className="w-full bg-black font-sans md:px-10" ref={containerRef}>
-      <div className="mx-auto max-w-7xl px-4 py-20 md:px-8 lg:px-10">
-        <h2 className="mb-4 text-2xl text-white md:text-4xl">Timeline</h2>
+      <div className="mx-auto max-w-7xl px-4 pb-12 pt-20 md:px-8 lg:px-10">
+        <h2 className="mb-4 text-3xl font-semibold text-white sm:text-4xl">Timeline</h2>
         <p className="max-w-2xl text-sm text-white/70 md:text-base">
           Career milestones across strategy, product, operations, and growth.
         </p>
@@ -46,7 +46,10 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
 
       <div ref={ref} className="relative mx-auto max-w-7xl pb-20">
         {data.map((item, index) => (
-          <div key={`${item.id}-${index}`} className="flex justify-start pt-10 md:gap-10 md:pt-24">
+          <div
+            key={`${item.id}-${index}`}
+            className={`flex justify-start ${index === 0 ? "pt-1 md:pt-4" : "pt-10 md:pt-24"} md:gap-10`}
+          >
             <div className="sticky top-36 z-40 flex w-full max-w-xs self-start md:max-w-sm md:flex-row md:items-center">
               <div className="absolute left-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black">
                 <div className="h-4 w-4 rounded-full border border-white/30 bg-white/70 p-2" />
