@@ -36,6 +36,8 @@ const strengths = [
 ];
 
 export default function Home() {
+  const basePath = process.env.NODE_ENV === "production" ? "/brians-website" : "";
+
   return (
     <main className="bg-black text-white">
       <section className="relative">
@@ -49,7 +51,7 @@ export default function Home() {
         />
         <div className="pointer-events-none absolute bottom-0 right-4 z-30 hidden lg:block xl:right-12">
           <Image
-            src="/bhuh2-2.png"
+            src={`${basePath}/bhuh2-2.png`}
             alt="Brian Huh"
             width={510}
             height={690}
