@@ -81,7 +81,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl">
           <h2 className="text-3xl font-semibold sm:text-4xl">Strengths</h2>
           <p className="mt-3 max-w-2xl text-white/80">
-            One continuous page. Scroll down to see the strengths that define how I build and lead.
+            Strengths that define how I build and lead.
           </p>
 
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
