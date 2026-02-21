@@ -3,6 +3,7 @@ import { GlowingEffect } from "@/components/main/glowing-effect";
 import { FeaturesSectionWithHoverEffects } from "@/components/main/features-section-with-hover-effects";
 import { Timeline } from "@/components/main/timeline";
 import { IconCloud, IconRouteAltLeft, IconTerminal2 } from "@tabler/icons-react";
+import { Github, Linkedin } from "lucide-react";
 import Image from "next/image";
 
 const strengths = [
@@ -134,6 +135,27 @@ export default function Home() {
   return (
     <main className="bg-black text-white">
       <section className="relative">
+        <div className="absolute right-6 top-6 z-[60] flex items-center gap-3 sm:right-8 sm:top-8">
+          <a
+            href="https://www.linkedin.com/in/brianhuh0522"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn profile"
+            className="p-1 text-white/90 transition hover:text-white"
+          >
+            <Linkedin className="h-5 w-5" />
+          </a>
+          <a
+            href="https://github.com/brianhuhcodes"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub profile"
+            className="p-1 text-white/90 transition hover:text-white"
+          >
+            <Github className="h-5 w-5" />
+          </a>
+        </div>
+
         <AetherHero
           className="z-20"
           layer="boxes"
