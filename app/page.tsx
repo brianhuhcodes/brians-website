@@ -46,7 +46,7 @@ const timelineData = [
     role: "Sector Growth & Enablement Lead (Chief of Staff to VP)",
     description:
       "Led GTM strategy, sales enablement, executive strategy reviews, and partnership development across technology platform offerings.",
-    logoSrc: "/Wipro.png",
+    logoSrc: "/logos/wipro.png",
     logoAlt: "Wipro logo",
     logoClassName: "h-20",
   },
@@ -57,7 +57,7 @@ const timelineData = [
     role: "MBA - Strategy, Business Technologies, Operations Research",
     description:
       "Completed MBA while building strategy and product leadership skills applied across consulting and startup work.",
-    logoSrc: "/Tepper.png",
+    logoSrc: "/logos/tepper.png",
     logoAlt: "Tepper logo",
     logoClassName: "h-20",
   },
@@ -68,7 +68,7 @@ const timelineData = [
     role: "Product Lead (Founder)",
     description:
       "Launched and scaled a photo processing startup, leading product lifecycle, user research, and data-driven growth through SEO and performance marketing.",
-    logoSrc: "/Tomamor-Square-Logo-Only.png",
+    logoSrc: "/logos/tomamor.png",
     logoAlt: "Tomamor logo",
     logoClassName: "h-20",
   },
@@ -79,7 +79,7 @@ const timelineData = [
     role: "Strategy Consultant - AI Applications",
     description:
       "Developed AI/ML SaaS roadmap and conducted market due diligence to support product positioning and sales engagement.",
-    logoSrc: "/IBM_logo.svg",
+    logoSrc: "/logos/ibm.svg",
     logoAlt: "IBM logo",
     logoClassName: "h-10",
   },
@@ -90,7 +90,7 @@ const timelineData = [
     role: "Account Manager / Lead Specialist Global",
     description:
       "Owned account growth, drove GTM expansion in Asia, and built analytics-enabled lead and conversion workflows.",
-    logoSrc: "/Ally%20Coffee.png",
+    logoSrc: "/logos/ally-coffee.png",
     logoAlt: "Ally Coffee logo",
     logoClassName: "h-20",
   },
@@ -101,7 +101,7 @@ const timelineData = [
     role: "Director of Marketing",
     description:
       "Led cross-functional operations and growth strategy, improving efficiency and expanding the customer base.",
-    logoSrc: "/E-cafe%20Chiapas.png",
+    logoSrc: "/logos/ecafe-chiapas.png",
     logoAlt: "E-cafe Chiapas logo",
     logoClassName: "h-20",
   },
@@ -203,7 +203,12 @@ export default function Home() {
       </section>
 
       <section id="timeline" className="pb-24">
-        <Timeline data={timelineData} />
+        <Timeline
+          data={timelineData.map((item) => ({
+            ...item,
+            logoSrc: item.logoSrc ? `${basePath}${item.logoSrc}` : item.logoSrc,
+          }))}
+        />
       </section>
 
       <section id="sample-work" className="px-6 pb-24 sm:px-10 lg:px-16">
