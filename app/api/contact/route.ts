@@ -155,7 +155,11 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Contact submit failed", error);
-    return NextResponse.json({ message: "Unable to send right now. Please try again later." }, { status: 500 });
+    const message =
+      process.env.NODE_ENV === "development" && error instanceof Error
+        ? error.message
+        : "Unable to send right now. Please try again later.";
+    return NextResponse.json({ message }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });

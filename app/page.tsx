@@ -1,5 +1,4 @@
 import { AetherHero } from "@/components/main/hero";
-import Contact from "@/components/main/contact";
 import { GlowingEffect } from "@/components/main/glowing-effect";
 import { FeaturesSectionWithHoverEffects } from "@/components/main/features-section-with-hover-effects";
 import { Timeline } from "@/components/main/timeline";
@@ -146,8 +145,8 @@ export default function Home() {
           secondaryCtaHref="#timeline"
           tertiaryCtaLabel="Sample Decks & Case Work"
           tertiaryCtaHref="#sample-work"
-          quaternaryCtaLabel="Contact Me"
-          quaternaryCtaHref="#contact"
+          quaternaryCtaLabel="View Resume"
+          quaternaryCtaHref={`${basePath}/resume`}
         />
         <div className="pointer-events-none absolute bottom-0 right-0 z-40 block sm:right-2 lg:right-4 xl:right-12">
           <Image
@@ -221,8 +220,6 @@ export default function Home() {
           />
         </div>
       </section>
-
-      <Contact />
     </main>
   );
 }
