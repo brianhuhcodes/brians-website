@@ -9,6 +9,8 @@ export type AetherHeroProps = {
   ctaHref?: string;
   secondaryCtaLabel?: string;
   secondaryCtaHref?: string;
+  tertiaryCtaLabel?: string;
+  tertiaryCtaHref?: string;
   align?: 'left' | 'center' | 'right';
   maxWidth?: number;
   overlayGradient?: string;
@@ -88,6 +90,8 @@ export default function AetherHero({
   ctaHref = '#',
   secondaryCtaLabel,
   secondaryCtaHref,
+  tertiaryCtaLabel,
+  tertiaryCtaHref,
   align = 'center',
   maxWidth = 960,
   overlayGradient = 'linear-gradient(180deg, #00000099, #00000040 40%, transparent)',
@@ -316,7 +320,7 @@ export default function AetherHero({
               </p>
             ) : null}
 
-            {(ctaLabel || secondaryCtaLabel) && (
+            {(ctaLabel || secondaryCtaLabel || tertiaryCtaLabel) && (
               <div
                 style={{
                   display: 'inline-flex',
@@ -363,6 +367,27 @@ export default function AetherHero({
                     }}
                   >
                     {secondaryCtaLabel}
+                  </a>
+                ) : null}
+
+                {tertiaryCtaLabel ? (
+                  <a
+                    href={tertiaryCtaHref}
+                    className="aurora-btn aurora-btn--ghost"
+                    style={{
+                      padding: '12px 18px',
+                      borderRadius: 12,
+                      background:
+                        'linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.06))',
+                      color: textColor,
+                      opacity: 1,
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.28), 0 10px 30px rgba(0,0,0,.2)',
+                      backdropFilter: 'blur(6px) saturate(120%)',
+                    }}
+                  >
+                    {tertiaryCtaLabel}
                   </a>
                 ) : null}
               </div>

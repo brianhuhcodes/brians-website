@@ -1,6 +1,8 @@
 import { AetherHero } from "@/components/main/hero";
 import { GlowingEffect } from "@/components/main/glowing-effect";
+import { FeaturesSectionWithHoverEffects } from "@/components/main/features-section-with-hover-effects";
 import { Timeline } from "@/components/main/timeline";
+import { IconCloud, IconRouteAltLeft, IconTerminal2 } from "@tabler/icons-react";
 import Image from "next/image";
 
 const strengths = [
@@ -105,6 +107,27 @@ const timelineData = [
   },
 ];
 
+const sampleWorkFeatures = [
+  {
+    title: "Drive Sales of Unmanaged Accounts",
+    description: "Commercial growth strategy and execution framework.",
+    icon: <IconTerminal2 />,
+    href: "/Sample%20Work/Drive%20Sales%20of%20Unmanaged%20Accounts%20-%20Brian%20Huh.pdf",
+  },
+  {
+    title: "Industry Marketing Manager",
+    description: "Positioning and go-to-market planning case work.",
+    icon: <IconCloud />,
+    href: "/Sample%20Work/Industry%20Marketing%20Manager%20Brian%20Huh.pdf",
+  },
+  {
+    title: "Turkey Legs EBITDA Growth Plan",
+    description: "Profitability growth model and operating plan.",
+    icon: <IconRouteAltLeft />,
+    href: "/Sample%20Work/Turkey%20Legs%20EBITDA%20Growth%20Plan.pdf",
+  },
+];
+
 export default function Home() {
   const basePath = process.env.NODE_ENV === "production" ? "/brians-website" : "";
 
@@ -120,6 +143,8 @@ export default function Home() {
           ctaHref="#strengths"
           secondaryCtaLabel="View Timeline"
           secondaryCtaHref="#timeline"
+          tertiaryCtaLabel="Sample Decks & Case Work"
+          tertiaryCtaHref="#sample-work"
         />
         <div className="pointer-events-none absolute bottom-0 right-0 z-40 block sm:right-2 lg:right-4 xl:right-12">
           <Image
@@ -177,6 +202,20 @@ export default function Home() {
 
       <section id="timeline" className="pb-24">
         <Timeline data={timelineData} />
+      </section>
+
+      <section id="sample-work" className="px-6 pb-24 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="inline-flex rounded-xl bg-white/10 px-5 py-3 text-sm font-semibold text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.28),0_10px_30px_rgba(0,0,0,0.2)] backdrop-blur-md">
+            Sample Decks &amp; Case Work
+          </div>
+          <FeaturesSectionWithHoverEffects
+            features={sampleWorkFeatures.map((item) => ({
+              ...item,
+              href: `${basePath}${item.href}`,
+            }))}
+          />
+        </div>
       </section>
     </main>
   );
