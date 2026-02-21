@@ -206,9 +206,10 @@ export default function Home() {
 
       <section id="sample-work" className="px-6 pb-24 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
-          <div className="inline-flex rounded-xl bg-white/10 px-5 py-3 text-sm font-semibold text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.28),0_10px_30px_rgba(0,0,0,0.2)] backdrop-blur-md">
-            Sample Decks &amp; Case Work
-          </div>
+          <h2 className="text-3xl font-semibold sm:text-4xl">Sample Decks &amp; Case Work</h2>
+          <p className="mt-3 max-w-2xl text-white/80">
+            Click any feature card below to open the corresponding PDF file.
+          </p>
           <FeaturesSectionWithHoverEffects
             features={sampleWorkFeatures.map((item) => ({
               ...item,
