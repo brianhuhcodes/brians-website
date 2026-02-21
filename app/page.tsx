@@ -110,13 +110,13 @@ const timelineData = [
 
 const sampleWorkFeatures = [
   {
-    title: "Drive Sales of Unmanaged Accounts",
+    title: "Unmanaged Accounts Turnover Plan",
     description: "Commercial growth strategy and execution framework.",
     icon: <IconTerminal2 />,
     href: "/Sample%20Work/Drive%20Sales%20of%20Unmanaged%20Accounts%20-%20Brian%20Huh.pdf",
   },
   {
-    title: "Industry Marketing Manager",
+    title: "Data Center Industry Marketing - Market Research",
     description: "Positioning and go-to-market planning case work.",
     icon: <IconCloud />,
     href: "/Sample%20Work/Industry%20Marketing%20Manager%20Brian%20Huh.pdf",
