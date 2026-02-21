@@ -1,5 +1,6 @@
 import { AetherHero } from "@/components/main/hero";
 import { GlowingEffect } from "@/components/main/glowing-effect";
+import { Timeline } from "@/components/main/timeline";
 import Image from "next/image";
 
 const strengths = [
@@ -35,6 +36,85 @@ const strengths = [
   },
 ];
 
+const timelineData = [
+  {
+    title: "2025",
+    content: (
+      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
+        <p className="text-lg font-semibold text-white">Wipro</p>
+        <p className="mt-1 text-sm text-white/80">Sector Growth &amp; Enablement Lead (Chief of Staff to VP)</p>
+        <p className="mt-3 text-sm leading-6 text-white/80">
+          Led GTM strategy, sales enablement, executive strategy reviews, and partnership development across
+          technology platform offerings.
+        </p>
+      </div>
+    ),
+  },
+  {
+    title: "2023",
+    content: (
+      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
+        <p className="text-lg font-semibold text-white">Carnegie Mellon University (Tepper School of Business)</p>
+        <p className="mt-1 text-sm text-white/80">MBA - Strategy, Business Technologies, Operations Research</p>
+        <p className="mt-3 text-sm leading-6 text-white/80">
+          Completed MBA while building strategy and product leadership skills applied across consulting and startup
+          work.
+        </p>
+      </div>
+    ),
+  },
+  {
+    title: "2017-2023",
+    content: (
+      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
+        <p className="text-lg font-semibold text-white">Tomamor Photo</p>
+        <p className="mt-1 text-sm text-white/80">Product Lead (Founder)</p>
+        <p className="mt-3 text-sm leading-6 text-white/80">
+          Launched and scaled a photo processing startup, leading product lifecycle, user research, and data-driven
+          growth through SEO and performance marketing.
+        </p>
+      </div>
+    ),
+  },
+  {
+    title: "2022",
+    content: (
+      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
+        <p className="text-lg font-semibold text-white">IBM</p>
+        <p className="mt-1 text-sm text-white/80">Strategy Consultant - AI Applications</p>
+        <p className="mt-3 text-sm leading-6 text-white/80">
+          Developed AI/ML SaaS roadmap and conducted market due diligence to support product positioning and sales
+          engagement.
+        </p>
+      </div>
+    ),
+  },
+  {
+    title: "2021",
+    content: (
+      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
+        <p className="text-lg font-semibold text-white">Ally Coffee (Grupo Montesanto Tavares)</p>
+        <p className="mt-1 text-sm text-white/80">Account Manager / Lead Specialist Global</p>
+        <p className="mt-3 text-sm leading-6 text-white/80">
+          Owned account growth, drove GTM expansion in Asia, and built analytics-enabled lead and conversion workflows.
+        </p>
+      </div>
+    ),
+  },
+  {
+    title: "2014",
+    content: (
+      <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
+        <p className="text-lg font-semibold text-white">E-Café Exportadora de Café de Chiapas</p>
+        <p className="mt-1 text-sm text-white/80">Director of Marketing</p>
+        <p className="mt-3 text-sm leading-6 text-white/80">
+          Led cross-functional operations and growth strategy, improving efficiency and expanding the customer base.
+        </p>
+      </div>
+    ),
+  },
+];
+
 export default function Home() {
   const basePath = process.env.NODE_ENV === "production" ? "/brians-website" : "";
 
@@ -48,8 +128,8 @@ export default function Home() {
           subtitle="Product Manager and problem-solver"
           ctaLabel="View Strengths"
           ctaHref="#strengths"
-          secondaryCtaLabel="Contact"
-          secondaryCtaHref="#"
+          secondaryCtaLabel="View Timeline"
+          secondaryCtaHref="#timeline"
         />
         <div className="pointer-events-none absolute bottom-0 right-0 z-40 block sm:right-2 lg:right-4 xl:right-12">
           <Image
@@ -105,6 +185,10 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </section>
+
+      <section id="timeline" className="pb-24">
+        <Timeline data={timelineData} />
       </section>
     </main>
   );

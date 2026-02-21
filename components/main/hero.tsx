@@ -352,13 +352,14 @@ export default function AetherHero({
                     style={{
                       padding: '12px 18px',
                       borderRadius: 12,
-                      background: 'transparent',
+                      background:
+                        'linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.06))',
                       color: textColor,
-                      opacity: 0.85,
+                      opacity: 1,
                       textDecoration: 'none',
                       fontWeight: 600,
-                      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.28)',
-                      backdropFilter: 'blur(2px)',
+                      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.28), 0 10px 30px rgba(0,0,0,.2)',
+                      backdropFilter: 'blur(6px) saturate(120%)',
                     }}
                   >
                     {secondaryCtaLabel}
