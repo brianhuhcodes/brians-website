@@ -120,7 +120,8 @@ export default function ResumePage() {
       <section className="mx-auto max-w-xl rounded-2xl border border-white/20 bg-white/5 p-8">
         <h1 className="text-3xl font-semibold">Resume Access</h1>
         <p className="mt-3 text-white/80">
-          Resume download is gated to reduce scraping. Complete the captcha to continue.
+          Complete the captcha to continue. 
+          Please reach out to me directly for the most up to date resume as well.
         </p>
 
         <form className="mt-6 grid gap-4" onSubmit={onSubmit}>
