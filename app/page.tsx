@@ -133,10 +133,10 @@ const sampleWorkFeatures = [
 ];
 
 const navigationLinks = [
-  { href: "#strengths", label: "View Strengths", submenu: false },
-  { href: "#timeline", label: "View Timeline", submenu: false },
-  { href: "#sample-work", label: "Sample Decks & Case Work", submenu: false },
-  { href: "/resume", label: "View Resume", submenu: false },
+  { href: "#strengths", label: "View Strengths" },
+  { href: "#timeline", label: "View Timeline" },
+  { href: "#sample-work", label: "Sample Decks & Case Work" },
+  { href: "/resume", label: "View Resume" },
 ];
 
 export default function Home() {
@@ -235,55 +235,18 @@ export default function Home() {
             <nav className="max-md:hidden">
               <ul className="flex items-center gap-1 text-sm">
                 {navigationLinks.map((link, index) => (
-                  <li key={`${link.label}-${index}`} className="group relative">
-                    {"submenu" in link && link.submenu ? (
-                      <>
-                        <button className="rounded-md px-2 py-1.5 text-white/80 transition hover:bg-white/10 hover:text-white">
-                          {link.label}
-                        </button>
-                        <div className="invisible absolute left-0 top-10 z-50 min-w-[360px] rounded-lg border border-white/15 bg-black/95 p-3 opacity-0 shadow-xl transition group-hover:visible group-hover:opacity-100">
-                          <ul
-                            className={
-                              link.type === "description" ? "grid gap-2" : "grid grid-cols-2 gap-2"
-                            }
-                          >
-                            {link.items.map((item) => (
-                              <li key={item.label}>
-                                <a
-                                  href={item.href.startsWith("/") ? `${basePath}${item.href}` : item.href}
-                                  target={item.href.startsWith("http") ? "_blank" : undefined}
-                                  rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                                  className="block rounded-md p-2 transition hover:bg-white/10"
-                                >
-                                  {link.type === "description" ? (
-                                    <>
-                                      <div className="text-sm font-medium">{item.label}</div>
-                                      {"description" in item ? (
-                                        <p className="mt-1 text-xs text-white/65">{item.description}</p>
-                                      ) : null}
-                                    </>
-                                  ) : (
-                                    <div className="text-sm font-medium">{item.label}</div>
-                                  )}
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </>
-                    ) : (
-                      <a
-                        href={link.href.startsWith("/") ? `${basePath}${link.href}` : link.href}
-                        onClick={(event) => handleNavClick(event, link.href)}
-                        className={`rounded-md px-2 py-1.5 transition hover:bg-white/10 hover:text-white ${
-                          link.href.startsWith("#") && activeSection === link.href.slice(1)
-                            ? "bg-white/10 text-white"
-                            : "text-white/80"
-                        }`}
-                      >
-                        {link.label}
-                      </a>
-                    )}
+                  <li key={`${link.label}-${index}`}>
+                    <a
+                      href={link.href.startsWith("/") ? `${basePath}${link.href}` : link.href}
+                      onClick={(event) => handleNavClick(event, link.href)}
+                      className={`rounded-md px-2 py-1.5 transition hover:bg-white/10 hover:text-white ${
+                        link.href.startsWith("#") && activeSection === link.href.slice(1)
+                          ? "bg-white/10 text-white"
+                          : "text-white/80"
+                      }`}
+                    >
+                      {link.label}
+                    </a>
                   </li>
                 ))}
               </ul>
