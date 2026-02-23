@@ -240,6 +240,26 @@ export default function AetherHero({
     >
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+
+        .aurora-btn {
+          transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+        }
+
+        .aurora-btn--primary {
+          background: linear-gradient(135deg, rgba(34, 211, 238, 0.34), rgba(255, 255, 255, 0.1));
+          box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+            0 14px 36px rgba(0, 0, 0, 0.35),
+            0 0 24px rgba(34, 211, 238, 0.3);
+        }
+
+        .aurora-btn--primary:hover {
+          transform: translateY(-2px);
+          box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.38),
+            0 18px 42px rgba(0, 0, 0, 0.42),
+            0 0 34px rgba(34, 211, 238, 0.42);
+        }
       `}</style>
 
       <canvas
@@ -338,15 +358,13 @@ export default function AetherHero({
                     href={ctaHref}
                     className="aurora-btn aurora-btn--primary"
                     style={{
-                      padding: '12px 18px',
-                      borderRadius: 12,
-                      background:
-                        'linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.06))',
+                      padding: '12px 20px',
+                      borderRadius: 999,
                       color: textColor,
                       textDecoration: 'none',
                       fontWeight: 600,
-                      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.28), 0 10px 30px rgba(0,0,0,.2)',
-                      backdropFilter: 'blur(6px) saturate(120%)',
+                      letterSpacing: '0.01em',
+                      backdropFilter: 'blur(9px) saturate(135%)',
                     }}
                   >
                     {ctaLabel}

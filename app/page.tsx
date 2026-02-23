@@ -1,9 +1,12 @@
+"use client";
+
+import { useEffect, useState, type MouseEvent } from "react";
 import { AetherHero } from "@/components/main/hero";
 import { GlowingEffect } from "@/components/main/glowing-effect";
 import { FeaturesSectionWithHoverEffects } from "@/components/main/features-section-with-hover-effects";
 import { Timeline } from "@/components/main/timeline";
 import { IconCloud, IconRouteAltLeft, IconTerminal2 } from "@tabler/icons-react";
-import { Github, Linkedin } from "lucide-react";
+import { Github, Linkedin, Menu } from "lucide-react";
 import Image from "next/image";
 
 const strengths = [
@@ -129,46 +132,196 @@ const sampleWorkFeatures = [
   },
 ];
 
+const navigationLinks = [
+  { href: "#strengths", label: "View Strengths", submenu: false },
+  { href: "#timeline", label: "View Timeline", submenu: false },
+  { href: "#sample-work", label: "Sample Decks & Case Work", submenu: false },
+  { href: "/resume", label: "View Resume", submenu: false },
+];
+
 export default function Home() {
   const basePath = process.env.NODE_ENV === "production" ? "/brians-website" : "";
+  const [activeSection, setActiveSection] = useState<string>("home");
+  const activeSectionLabel =
+    activeSection === "home"
+      ? "Home"
+      : activeSection === "strengths"
+        ? "View Strengths"
+        : activeSection === "timeline"
+          ? "View Timeline"
+          : "Sample Decks & Case Work";
+
+  useEffect(() => {
+    const sectionIds = ["home", "strengths", "timeline", "sample-work"];
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((section): section is HTMLElement => Boolean(section));
+
+    if (!sections.length) return;
+
+    const onScroll = () => {
+      const marker = window.scrollY + window.innerHeight * 0.35;
+      let current = "home";
+
+      for (const section of sections) {
+        if (section.offsetTop <= marker) {
+          current = section.id;
+        }
+      }
+      setActiveSection(current);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (!href.startsWith("#")) return;
+    event.preventDefault();
+    const target = document.getElementById(href.slice(1));
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <main className="bg-black text-white">
-      <section className="relative overflow-hidden">
-        <div className="absolute right-6 top-6 z-[60] flex items-center gap-3 sm:right-8 sm:top-8">
-          <a
-            href="https://www.linkedin.com/in/brianhuh0522"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn profile"
-            className="p-1 text-white/90 transition hover:text-white"
-          >
-            <Linkedin className="h-5 w-5" />
-          </a>
-          <a
-            href="https://github.com/brianhuhcodes"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub profile"
-            className="p-1 text-white/90 transition hover:text-white"
-          >
-            <Github className="h-5 w-5" />
-          </a>
-        </div>
+      <header
+        className="fixed inset-x-0 top-0 z-[80] border-b border-white/10 bg-black/55 backdrop-blur-md"
+        style={{
+          fontFamily:
+            "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial",
+        }}
+      >
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-5 sm:h-16 sm:px-8 lg:px-12">
+          <div className="flex items-center gap-2">
+            <details className="relative md:hidden">
+              <summary className="flex size-8 list-none items-center justify-center rounded-md border border-white/15 bg-white/5 text-white/90">
+                <Menu className="h-4 w-4" />
+              </summary>
+              <div className="absolute left-0 top-10 w-64 rounded-lg border border-white/15 bg-black/90 p-2 shadow-xl">
+                <ul className="space-y-2 text-sm">
+                  {navigationLinks.map((link, index) => (
+                    <li key={`${link.label}-${index}`} className="rounded-md px-2 py-1.5">
+                      <a
+                        href={link.href.startsWith("/") ? `${basePath}${link.href}` : link.href}
+                        onClick={(event) => handleNavClick(event, link.href)}
+                        className={`block transition hover:text-white ${
+                          link.href.startsWith("#") && activeSection === link.href.slice(1)
+                            ? "text-white"
+                            : "text-white/80"
+                        }`}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </details>
 
+            <a href="#" className="mr-5 text-sm font-semibold tracking-wide text-white/90">
+              Brian Huh
+            </a>
+            <a
+              href="#"
+              onClick={(event) => handleNavClick(event, "#home")}
+              className={`rounded-md px-2 py-1.5 text-sm transition hover:bg-white/10 hover:text-white ${
+                activeSection === "home" ? "bg-white/10 text-white" : "text-white/80"
+              }`}
+            >
+              Home
+            </a>
+            <nav className="max-md:hidden">
+              <ul className="flex items-center gap-1 text-sm">
+                {navigationLinks.map((link, index) => (
+                  <li key={`${link.label}-${index}`} className="group relative">
+                    {"submenu" in link && link.submenu ? (
+                      <>
+                        <button className="rounded-md px-2 py-1.5 text-white/80 transition hover:bg-white/10 hover:text-white">
+                          {link.label}
+                        </button>
+                        <div className="invisible absolute left-0 top-10 z-50 min-w-[360px] rounded-lg border border-white/15 bg-black/95 p-3 opacity-0 shadow-xl transition group-hover:visible group-hover:opacity-100">
+                          <ul
+                            className={
+                              link.type === "description" ? "grid gap-2" : "grid grid-cols-2 gap-2"
+                            }
+                          >
+                            {link.items.map((item) => (
+                              <li key={item.label}>
+                                <a
+                                  href={item.href.startsWith("/") ? `${basePath}${item.href}` : item.href}
+                                  target={item.href.startsWith("http") ? "_blank" : undefined}
+                                  rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                                  className="block rounded-md p-2 transition hover:bg-white/10"
+                                >
+                                  {link.type === "description" ? (
+                                    <>
+                                      <div className="text-sm font-medium">{item.label}</div>
+                                      {"description" in item ? (
+                                        <p className="mt-1 text-xs text-white/65">{item.description}</p>
+                                      ) : null}
+                                    </>
+                                  ) : (
+                                    <div className="text-sm font-medium">{item.label}</div>
+                                  )}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </>
+                    ) : (
+                      <a
+                        href={link.href.startsWith("/") ? `${basePath}${link.href}` : link.href}
+                        onClick={(event) => handleNavClick(event, link.href)}
+                        className={`rounded-md px-2 py-1.5 transition hover:bg-white/10 hover:text-white ${
+                          link.href.startsWith("#") && activeSection === link.href.slice(1)
+                            ? "bg-white/10 text-white"
+                            : "text-white/80"
+                        }`}
+                      >
+                        {link.label}
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="max-md:text-xs text-white/70 md:hidden">{activeSectionLabel}</span>
+            <a
+              href="https://www.linkedin.com/in/brianhuh0522"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn profile"
+              className="p-1 text-white/90 transition hover:text-white"
+            >
+              <Linkedin className="h-5 w-5" />
+            </a>
+            <a
+              href="https://github.com/brianhuhcodes"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub profile"
+              className="p-1 text-white/90 transition hover:text-white"
+            >
+              <Github className="h-5 w-5" />
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <section id="home" className="relative overflow-hidden">
         <AetherHero
           className="z-20"
           layer="boxes"
           title="Brian Huh"
           subtitle="Product Manager and problem-solver"
-          ctaLabel="View Strengths"
+          ctaLabel="Discover More"
           ctaHref="#strengths"
-          secondaryCtaLabel="View Timeline"
-          secondaryCtaHref="#timeline"
-          tertiaryCtaLabel="Sample Decks & Case Work"
-          tertiaryCtaHref="#sample-work"
-          quaternaryCtaLabel="View Resume"
-          quaternaryCtaHref={`${basePath}/resume`}
         />
         <div className="pointer-events-none absolute bottom-0 right-0 z-40 block sm:right-2 lg:right-4 xl:right-12">
           <Image
@@ -191,7 +344,7 @@ export default function Home() {
 
       <section
         id="strengths"
-        className="px-6 pb-24 pt-10 sm:px-10 lg:px-16"
+        className="scroll-mt-24 px-6 pb-24 pt-10 sm:px-10 lg:px-16"
         style={{
           background:
             "linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.7) 100%)",
@@ -224,7 +377,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="timeline" className="pb-24">
+      <section id="timeline" className="scroll-mt-24 pb-24">
         <Timeline
           data={timelineData.map((item) => ({
             ...item,
@@ -233,7 +386,7 @@ export default function Home() {
         />
       </section>
 
-      <section id="sample-work" className="px-6 pb-24 sm:px-10 lg:px-16">
+      <section id="sample-work" className="scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <h2 className="text-3xl font-semibold sm:text-4xl">Sample Decks &amp; Case Work</h2>
           <p className="mt-3 max-w-2xl text-white/80">
