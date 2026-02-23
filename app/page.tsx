@@ -134,7 +134,7 @@ export default function Home() {
 
   return (
     <main className="bg-black text-white">
-      <section className="relative">
+      <section className="relative overflow-hidden">
         <div className="absolute right-6 top-6 z-[60] flex items-center gap-3 sm:right-8 sm:top-8">
           <a
             href="https://www.linkedin.com/in/brianhuh0522"
@@ -172,11 +172,11 @@ export default function Home() {
         />
         <div className="pointer-events-none absolute bottom-0 right-0 z-40 block sm:right-2 lg:right-4 xl:right-12">
           <Image
-            src={`${basePath}/bhuh2-3.png`}
+            src={`${basePath}/profile-neon.png`}
             alt="Brian Huh"
-            width={510}
-            height={690}
-            className="h-auto w-[48vw] min-w-[220px] max-w-[320px] object-contain object-bottom sm:w-[42vw] sm:max-w-[380px] lg:w-[clamp(420px,36vw,680px)] lg:max-w-[680px]"
+            width={1200}
+            height={1536}
+            className="h-auto w-[104vw] min-w-[480px] max-w-[700px] translate-x-[22%] object-contain object-bottom sm:w-[92vw] sm:max-w-[840px] sm:translate-x-[18%] lg:w-[clamp(920px,76vw,1520px)] lg:max-w-[1520px] lg:translate-x-[35%]"
             priority
           />
         </div>
